@@ -26,6 +26,14 @@
             android:name=".activity.DetailActivity"
             android:label="@string/title_activity_detail"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <service android:name=".data.UpdaterService"
+            android:exported="false" />
+
+        <provider android:name=".data.ItemsProvider"
+            android:authorities="com.example.xyzreader"
+            android:exported="false" />
+
     </application>
 
 </manifest>
