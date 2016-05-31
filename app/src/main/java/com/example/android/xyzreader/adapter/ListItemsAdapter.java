@@ -1,6 +1,7 @@
 package com.example.android.xyzreader.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +16,10 @@ import android.widget.TextView;
 
 import com.example.android.xyzreader.R;
 import com.example.android.xyzreader.data.ArticleLoader;
+import com.example.android.xyzreader.data.ItemsContract;
 import com.squareup.picasso.Picasso;
+
+import static android.support.v4.app.ActivityCompat.startActivity;
 
 /**
  * Created by olgakuklina on 2016-05-04.
@@ -24,8 +28,8 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.View
 
     public static final String TAG = ListItemsAdapter.class.getSimpleName();
     private final int screenWidth;
-    public ListItemsAdapter(Activity activity, Cursor cursor) {
 
+    public ListItemsAdapter(Activity activity, Cursor cursor) {
 
         mActivity = activity;
         mCursor = cursor;
@@ -37,7 +41,8 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.View
         void onListItemSelected(long articleId);
 
         OnListItemClickListener listner = new OnListItemClickListener() {
-            @Override public void onListItemSelected(long itemId) {}
+            @Override public void onListItemSelected(long itemId) {
+            }
         };
     }
     private OnListItemClickListener mListener = OnListItemClickListener.listner;
@@ -55,7 +60,7 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.View
         return mCursor.getLong(ArticleLoader.Query._ID);
     }
 
-        public static class ViewHolder extends RecyclerView.ViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder {
             // each data item is just a string in this case
 
             public ImageView thumbnailView;
@@ -67,6 +72,12 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.View
                 thumbnailView = (ImageView) v.findViewById(R.id.thumbnail);
                 titleView = (TextView) v.findViewById(R.id.article_title);
                 subtitleView = (TextView) v.findViewById(R.id.article_subtitle);
+                v.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mListener.onListItemSelected(getItemId());
+                    }
+                });
             }
         }
 

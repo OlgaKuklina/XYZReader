@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-
+    <color name="colorPrimary">#f1d505</color>
+    <color name="colorPrimaryDark">#ed580d</color>
+    <color name="colorAccent">#0671ab</color>
+    <color name="photo_placeholder">#ccc</color>
+    <color name="ltgray">#ffe0e0e0</color>
+    <color name="theme_primary">#04561A</color>
+    <color name="theme_primary_dark">#04561A</color>
+    <color name="theme_accent">#04561A</color>
     <array name="swipe_progress_colors">
         <item>colorPrimary</item>
         <item>colorAccent</item>

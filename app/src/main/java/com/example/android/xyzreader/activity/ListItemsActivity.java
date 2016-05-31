@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import com.example.android.xyzreader.R;
 import com.example.android.xyzreader.adapter.ListItemsAdapter;
 import com.example.android.xyzreader.data.ArticleLoader;
+import com.example.android.xyzreader.data.ItemsContract;
 import com.example.android.xyzreader.data.UpdaterService;
 
 /**
@@ -57,9 +58,6 @@ public class ListItemsActivity extends MainActivity implements LoaderManager.Loa
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         ViewCompat.setElevation(mToolbar, getResources().getDimension(R.dimen.tb_elevation));
 
-
-
-
        // setSupportActionBar(mToolbar);
 
         ActionBar ab = getSupportActionBar();
@@ -93,7 +91,6 @@ public class ListItemsActivity extends MainActivity implements LoaderManager.Loa
     }
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-
         Log.v(TAG, "onCreateLoader");
         return ArticleLoader.newAllArticlesInstance(this);
     }
@@ -123,6 +120,7 @@ public class ListItemsActivity extends MainActivity implements LoaderManager.Loa
     @Override
     public void onListItemSelected(long articleId) {
 
+        startActivity(new Intent(Intent.ACTION_VIEW, ItemsContract.Items.buildItemUri(articleId)));
     }
     @Override
     protected void onStart() {
@@ -143,6 +141,6 @@ public class ListItemsActivity extends MainActivity implements LoaderManager.Loa
 
     @Override
     public void onRefresh() {
-
+        startService(new Intent(this, UpdaterService.class));
     }
 }

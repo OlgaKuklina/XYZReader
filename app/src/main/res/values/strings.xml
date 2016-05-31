@@ -4,4 +4,6 @@
     <string name="action_settings">Settings</string>
     <string name="menu_refresh">MenuRefresh</string>
     <string name="post_thumbnail">Post thumbnail</string>
+    <string name="up">Up</string>
+    <string name="action_share">Share</string>
 </resources>
