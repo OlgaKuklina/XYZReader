@@ -9,13 +9,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.xyzreader.R;
-import com.example.android.xyzreader.activity.ListItemsActivity;
 import com.example.android.xyzreader.data.ArticleLoader;
-import com.example.android.xyzreader.ui.DynamicHeightNetworkImageView;
-import com.example.android.xyzreader.ui.ImageLoaderHelper;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by olgakuklina on 2016-05-04.
@@ -23,12 +23,14 @@ import com.example.android.xyzreader.ui.ImageLoaderHelper;
 public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.ViewHolder> {
 
     public static final String TAG = ListItemsAdapter.class.getSimpleName();
-
+    private final int screenWidth;
     public ListItemsAdapter(Activity activity, Cursor cursor) {
 
+
         mActivity = activity;
-        mInflater = LayoutInflater.from(activity);
         mCursor = cursor;
+        screenWidth = mActivity.getBaseContext().getResources().getDisplayMetrics().widthPixels;
+        Log.v(TAG, "screenWidth = " + screenWidth);
     }
 
     public interface OnListItemClickListener {
@@ -40,7 +42,6 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.View
     }
     private OnListItemClickListener mListener = OnListItemClickListener.listner;
     private final Activity mActivity;
-    private final LayoutInflater mInflater;
     private final Cursor mCursor;
 
     public ListItemsAdapter setListener(@NonNull OnListItemClickListener listener) {
@@ -56,13 +57,14 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.View
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
             // each data item is just a string in this case
-            public DynamicHeightNetworkImageView thumbnailView;
+
+            public ImageView thumbnailView;
             public TextView titleView;
             public TextView subtitleView;
 
             public ViewHolder(View v) {
                 super(v);
-                thumbnailView = (DynamicHeightNetworkImageView) v.findViewById(R.id.thumbnail);
+                thumbnailView = (ImageView) v.findViewById(R.id.thumbnail);
                 titleView = (TextView) v.findViewById(R.id.article_title);
                 subtitleView = (TextView) v.findViewById(R.id.article_subtitle);
             }
@@ -92,13 +94,12 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.View
                         DateUtils.FORMAT_ABBREV_ALL).toString()
                         + " by "
                         + mCursor.getString(ArticleLoader.Query.AUTHOR));
-
-
-        holder.thumbnailView.setImageUrl(
-                mCursor.getString(ArticleLoader.Query.THUMB_URL),
-                ImageLoaderHelper.getInstance(mActivity).getImageLoader());
-        holder.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
-
+        float aspectRatio = mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO);
+        Log.v(TAG, "aspectRatio = " + aspectRatio);
+        holder.thumbnailView.setLayoutParams(new LinearLayout.LayoutParams((int) (screenWidth), (int) (screenWidth/aspectRatio)));
+        Picasso pic = Picasso.with(mActivity);
+        pic.load(mCursor.getString(ArticleLoader.Query.THUMB_URL))
+                .into(holder.thumbnailView);
     }
 
     @Override
