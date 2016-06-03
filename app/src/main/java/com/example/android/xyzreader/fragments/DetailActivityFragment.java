@@ -1,5 +1,6 @@
 package com.example.android.xyzreader.fragments;
 
+import android.annotation.SuppressLint;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.content.Intent;
@@ -20,7 +21,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -32,6 +35,8 @@ import com.example.android.xyzreader.data.ArticleLoader;
 import com.example.android.xyzreader.ui.DrawInsetsFrameLayout;
 import com.example.android.xyzreader.ui.ImageLoaderHelper;
 import com.example.android.xyzreader.ui.ObservableScrollView;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.Picasso;
 
 
 /**
@@ -188,7 +193,21 @@ public class DetailActivityFragment extends Fragment implements
         bylineView.setMovementMethod(new LinkMovementMethod());
         TextView bodyView = (TextView) mRootView.findViewById(R.id.article_body);
 //        bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
+        final Palette.PaletteAsyncListener paletteAsyncListener = new Palette.PaletteAsyncListener() {
+            @SuppressLint("NewApi")
+            @Override
+            public void onGenerated(Palette palette) {
+                if (getActivity() == null)
+                    return;
+                Log.v(TAG, "textSwatch.PaletteAsyncListener");
 
+                Palette.Swatch textSwatch = palette.getMutedSwatch();
+                Palette.Swatch bgSwatch = palette.getDarkVibrantSwatch();
+
+                mRootView.findViewById(R.id.meta_bar).setBackgroundColor(bgSwatch.getBodyTextColor());
+                updateStatusBar();
+            }
+        };
         if (mCursor != null) {
             mRootView.setAlpha(0);
             mRootView.setVisibility(View.VISIBLE);
@@ -208,13 +227,22 @@ public class DetailActivityFragment extends Fragment implements
                         @Override
                         public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
                             Bitmap bitmap = imageContainer.getBitmap();
+//                            Picasso pic = Picasso.with(getActivity());
+//                            float aspectRatio = mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO);
+//                            Log.v(TAG, "aspectRatio = " + aspectRatio);
+//                            int  screenWidth = getActivity().getBaseContext().getResources().getDisplayMetrics().widthPixels;
+//                            mPhotoView.setLayoutParams(new FrameLayout.LayoutParams((int) (screenWidth), (int) (screenWidth/aspectRatio)));
+//                            pic.load(mCursor.getString(ArticleLoader.Query.THUMB_URL))
+//                                    .placeholder(R.color.colorPrimary)
+//                                    .into(mPhotoView);
+
                             if (bitmap != null) {
                                 Palette p = Palette.generate(bitmap, 12);
                                 mMutedColor = p.getDarkMutedColor(0xFF333333);
                                 mPhotoView.setImageBitmap(imageContainer.getBitmap());
                                 mRootView.findViewById(R.id.meta_bar)
                                         .setBackgroundColor(mMutedColor);
-                                updateStatusBar();
+                                updateStatusBar();  
                             }
                         }
 

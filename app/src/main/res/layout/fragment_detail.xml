@@ -37,7 +37,6 @@
             </FrameLayout>
 
             <LinearLayout
-                android:id="@+id/article_detail_content_container"
                 android:layout_width="@dimen/article_detail_card_max_width"
                 android:orientation="vertical"
                 android:layout_height="wrap_content"
