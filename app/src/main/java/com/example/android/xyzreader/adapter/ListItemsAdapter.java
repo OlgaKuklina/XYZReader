@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.example.android.xyzreader.R;
 import com.example.android.xyzreader.data.ArticleLoader;
 import com.example.android.xyzreader.data.ItemsContract;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import static android.support.v4.app.ActivityCompat.startActivity;
@@ -97,7 +99,9 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.View
     public void onBindViewHolder(ListItemsAdapter.ViewHolder holder, int position) {
 
         mCursor.moveToPosition(position);
+        holder.titleView.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.colorPrimary));
         holder.titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
+        holder.subtitleView.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.colorPrimary));
         holder.subtitleView.setText(
                 DateUtils.getRelativeTimeSpanString(
                         mCursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
@@ -110,6 +114,8 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.View
         holder.thumbnailView.setLayoutParams(new LinearLayout.LayoutParams((int) (screenWidth), (int) (screenWidth/aspectRatio)));
         Picasso pic = Picasso.with(mActivity);
         pic.load(mCursor.getString(ArticleLoader.Query.THUMB_URL))
+                .memoryPolicy(MemoryPolicy.NO_CACHE)
+                .placeholder(R.color.colorPrimary)
                 .into(holder.thumbnailView);
     }
 

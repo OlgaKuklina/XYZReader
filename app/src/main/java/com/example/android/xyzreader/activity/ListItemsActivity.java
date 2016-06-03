@@ -58,13 +58,13 @@ public class ListItemsActivity extends MainActivity implements LoaderManager.Loa
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         ViewCompat.setElevation(mToolbar, getResources().getDimension(R.dimen.tb_elevation));
 
-       // setSupportActionBar(mToolbar);
+        setSupportActionBar(mToolbar);
 
         ActionBar ab = getSupportActionBar();
-        if (ab != null) ab.setTitle("");
+        if (ab != null) ab.setTitle("XYZReader");
 
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        mSwipeRefreshLayout.setColorSchemeColors(getResources().getIntArray(R.array.swipe_progress_colors));
+        mSwipeRefreshLayout.setColorSchemeColors(getResources().getIntArray(R.array.swipe_to_refresh_progress_colors));
 
         getSupportLoaderManager().initLoader(0, null, this);
 
@@ -141,6 +141,7 @@ public class ListItemsActivity extends MainActivity implements LoaderManager.Loa
 
     @Override
     public void onRefresh() {
-        startService(new Intent(this, UpdaterService.class));
+        Log.v(TAG, "onRefresh");
+        refresh();
     }
 }

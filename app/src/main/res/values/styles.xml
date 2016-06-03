@@ -8,11 +8,30 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.NoActionBar" parent="@style/Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme.NoActionBar">
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <!-- Toolbar -->
+
+    <style name="ActionBar.ThemeOverlay" parent="">
+        <item name="android:textColorPrimary">#fff</item>
+        <item name="colorControlNormal">#fff</item>
+        <item name="colorControlHighlight">#3fff</item>
+    </style>
+
+    <style name="ActionBar.PopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="ActionBar.TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/colorPrimarylight</item>
+        <item name="android:textSize">@dimen/text_size_large</item>
+    </style>
 
 </resources>

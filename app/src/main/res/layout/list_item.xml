@@ -31,7 +31,7 @@
             android:paddingRight="16dp"
             android:paddingBottom="4dp"
             android:ellipsize="end"
-            android:maxLines="4" />
+            android:maxLines="4"/>
 
         <TextView
             android:id="@+id/article_subtitle"

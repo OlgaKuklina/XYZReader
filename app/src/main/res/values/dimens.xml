@@ -5,8 +5,6 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="tb_elevation">6dp</dimen>
     <!-- detail -->
-    <dimen name="detail_title_text_size">32sp</dimen>
-    <dimen name="detail_body_text_size">22sp</dimen>
     <item name="detail_body_line_spacing_multiplier" format="float" type="fraction">1.25</item>
 
     <dimen name="fab_elevation">2dp</dimen>
@@ -15,12 +13,18 @@
     <!-- detail -->
     <bool name="detail_is_card">false</bool>
     <dimen name="detail_card_top_margin">304dp</dimen>
-    <dimen name="detail_card_max_width">10000dp</dimen> <!-- force match_parent -->
+    <dimen name="article_detail_card_max_width">10000dp</dimen> <!-- force match_parent -->
     <dimen name="detail_body_bottom_margin">88dp</dimen>
-
+    <dimen name="detail_card_max_width">10000dp</dimen> <!-- force match_parent -->
     <dimen name="article_detail_photo_max_width">500dp</dimen>
     <dimen name="article_detail_content_margin_bottom">0dp</dimen>
     <dimen name="detail_inner_horiz_margin">16dp</dimen>
     <item name="article_detail_body_line_spacing_multiplier" format="float" type="fraction">1.25</item>
+    <dimen name="text_size_large">18sp</dimen>
+    <dimen name="text_size_medium">14sp</dimen>
+    <dimen name="placeholder_article_aspect_ratio">15dp</dimen>
+
+    <dimen name="fab_compat_margin">16dp</dimen>
+    <dimen name="fab_compat_border">0dp</dimen>
 
 </resources>
