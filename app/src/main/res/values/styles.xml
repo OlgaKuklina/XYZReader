@@ -29,7 +29,7 @@
 
     <style name="ActionBar.PopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="ActionBar.TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+    <style name="ActionBar.TextTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@color/colorPrimarylight</item>
         <item name="android:textSize">@dimen/text_size_large</item>
     </style>

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewCompat;
@@ -27,11 +26,9 @@ import com.example.android.xyzreader.R.array;
 import com.example.android.xyzreader.R.dimen;
 import com.example.android.xyzreader.R.id;
 import com.example.android.xyzreader.R.layout;
-import com.example.android.xyzreader.R.menu;
 import com.example.android.xyzreader.adapter.ListItemsAdapter;
 import com.example.android.xyzreader.adapter.ListItemsAdapter.OnListItemClickListener;
 import com.example.android.xyzreader.data.ArticleLoader;
-import com.example.android.xyzreader.data.ItemsContract;
 import com.example.android.xyzreader.data.ItemsContract.Items;
 import com.example.android.xyzreader.data.UpdaterService;
 
@@ -71,8 +68,8 @@ public class ListItemsActivity extends MainActivity implements LoaderCallbacks<C
 
         this.setSupportActionBar(this.mToolbar);
 
-        ActionBar ab = this.getSupportActionBar();
-        if (ab != null) ab.setTitle("XYZReader");
+        ActionBar ab = getSupportActionBar();
+        if (ab != null) ab.setTitle("");
 
         this.mSwipeRefreshLayout.setOnRefreshListener(this);
         this.mSwipeRefreshLayout.setColorSchemeColors(this.getResources().getIntArray(array.swipe_to_refresh_progress_colors));

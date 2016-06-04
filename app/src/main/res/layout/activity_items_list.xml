@@ -7,20 +7,18 @@
     android:fitsSystemWindows="true"
     tools:context=".activity.ListItemsActivity">
 
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-
-    <!-- A RecyclerView with some commonly used attributes -->
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/items_list_recycler_view"
-        android:scrollbars="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        <!-- A RecyclerView with some commonly used attributes -->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/items_list_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
@@ -34,18 +32,15 @@
             android:layout_height="?actionBarSize"
             android:background="?colorPrimary"
             android:theme="@style/ActionBar.ThemeOverlay"
-            app:popupTheme="@style/ActionBar.PopupThemeOverlay"
-            app:titleTextAppearance="@style/ActionBar.TitleText"
-            app:layout_scrollFlags="scroll|enterAlways">
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ActionBar.PopupThemeOverlay">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/app_name" />
-
-
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/logo" />
 
         </android.support.v7.widget.Toolbar>
-
     </android.support.design.widget.AppBarLayout>
 </android.support.design.widget.CoordinatorLayout>
