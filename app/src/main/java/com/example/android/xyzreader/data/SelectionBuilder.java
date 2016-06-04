@@ -37,7 +37,7 @@ import java.util.HashMap;
  * thread safe.
  */
 public class SelectionBuilder {
-    private String mTable = null;
+    private String mTable;
     private HashMap<String, String> mProjectionMap;
     private StringBuilder mSelection;
     private ArrayList<String> mSelectionArgs;
@@ -46,15 +46,15 @@ public class SelectionBuilder {
      * Reset any internal state, allowing this builder to be recycled.
      */
     public SelectionBuilder reset() {
-        mTable = null;
-		if (mProjectionMap != null) {
-			mProjectionMap.clear();
+        this.mTable = null;
+		if (this.mProjectionMap != null) {
+            this.mProjectionMap.clear();
 		}
-		if (mSelection != null) {
-			mSelection.setLength(0);
+		if (this.mSelection != null) {
+            this.mSelection.setLength(0);
 		}
-		if (mSelectionArgs != null) {
-			mSelectionArgs.clear();
+		if (this.mSelectionArgs != null) {
+            this.mSelectionArgs.clear();
 		}
         return this;
     }
@@ -74,16 +74,16 @@ public class SelectionBuilder {
             return this;
         }
 
-        ensureSelection(selection.length());
-        if (mSelection.length() > 0) {
-            mSelection.append(" AND ");
+        this.ensureSelection(selection.length());
+        if (this.mSelection.length() > 0) {
+            this.mSelection.append(" AND ");
         }
 
-        mSelection.append("(").append(selection).append(")");
+        this.mSelection.append("(").append(selection).append(")");
         if (selectionArgs != null) {
-        	ensureSelectionArgs();
+            this.ensureSelectionArgs();
             for (String arg : selectionArgs) {
-                mSelectionArgs.add(arg);
+                this.mSelectionArgs.add(arg);
             }
         }
 
@@ -91,43 +91,43 @@ public class SelectionBuilder {
     }
 
     public SelectionBuilder table(String table) {
-        mTable = table;
+        this.mTable = table;
         return this;
     }
 
     private void assertTable() {
-        if (mTable == null) {
+        if (this.mTable == null) {
             throw new IllegalStateException("Table not specified");
         }
     }
 
     private void ensureProjectionMap() {
-		if (mProjectionMap == null) {
-			mProjectionMap = new HashMap<String, String>();
+		if (this.mProjectionMap == null) {
+            this.mProjectionMap = new HashMap<String, String>();
 		}
     }
 
     private void ensureSelection(int lengthHint) {
-    	if (mSelection == null) {
-    		mSelection = new StringBuilder(lengthHint + 8);
+    	if (this.mSelection == null) {
+            this.mSelection = new StringBuilder(lengthHint + 8);
     	}
     }
 
     private void ensureSelectionArgs() {
-    	if (mSelectionArgs == null) {
-    		mSelectionArgs = new ArrayList<String>();
+    	if (this.mSelectionArgs == null) {
+            this.mSelectionArgs = new ArrayList<String>();
     	}
     }
 
     public SelectionBuilder mapToTable(String column, String table) {
-    	ensureProjectionMap();
-        mProjectionMap.put(column, table + "." + column);
+        this.ensureProjectionMap();
+        this.mProjectionMap.put(column, table + "." + column);
         return this;
     }
 
     public SelectionBuilder map(String fromColumn, String toClause) {
-    	ensureProjectionMap();
-        mProjectionMap.put(fromColumn, toClause + " AS " + fromColumn);
+        this.ensureProjectionMap();
+        this.mProjectionMap.put(fromColumn, toClause + " AS " + fromColumn);
         return this;
     }
 
@@ -137,8 +137,8 @@ public class SelectionBuilder {
      * @see #getSelectionArgs()
      */
     public String getSelection() {
-    	if (mSelection != null) {
-            return mSelection.toString();
+    	if (this.mSelection != null) {
+            return this.mSelection.toString();
     	} else {
     		return null;
     	}
@@ -150,17 +150,17 @@ public class SelectionBuilder {
      * @see #getSelection()
      */
     public String[] getSelectionArgs() {
-    	if (mSelectionArgs != null) {
-            return mSelectionArgs.toArray(new String[mSelectionArgs.size()]);
+    	if (this.mSelectionArgs != null) {
+            return this.mSelectionArgs.toArray(new String[this.mSelectionArgs.size()]);
     	} else {
     		return null;
     	}
     }
 
     private void mapColumns(String[] columns) {
-    	if (mProjectionMap == null) return;
+    	if (this.mProjectionMap == null) return;
         for (int i = 0; i < columns.length; i++) {
-            final String target = mProjectionMap.get(columns[i]);
+            String target = this.mProjectionMap.get(columns[i]);
             if (target != null) {
                 columns[i] = target;
             }
@@ -169,15 +169,15 @@ public class SelectionBuilder {
 
     @Override
     public String toString() {
-        return "SelectionBuilder[table=" + mTable + ", selection=" + getSelection()
-                + ", selectionArgs=" + Arrays.toString(getSelectionArgs()) + "]";
+        return "SelectionBuilder[table=" + this.mTable + ", selection=" + this.getSelection()
+                + ", selectionArgs=" + Arrays.toString(this.getSelectionArgs()) + "]";
     }
 
     /**
      * Execute query using the current internal state as {@code WHERE} clause.
      */
     public Cursor query(SQLiteDatabase db, String[] columns, String orderBy) {
-        return query(db, columns, null, null, orderBy, null);
+        return this.query(db, columns, null, null, orderBy, null);
     }
 
     /**
@@ -185,9 +185,9 @@ public class SelectionBuilder {
      */
     public Cursor query(SQLiteDatabase db, String[] columns, String groupBy,
                         String having, String orderBy, String limit) {
-        assertTable();
-        if (columns != null) mapColumns(columns);
-        return db.query(mTable, columns, getSelection(), getSelectionArgs(), groupBy, having,
+        this.assertTable();
+        if (columns != null) this.mapColumns(columns);
+        return db.query(this.mTable, columns, this.getSelection(), this.getSelectionArgs(), groupBy, having,
                 orderBy, limit);
     }
 
@@ -195,15 +195,15 @@ public class SelectionBuilder {
      * Execute update using the current internal state as {@code WHERE} clause.
      */
     public int update(SQLiteDatabase db, ContentValues values) {
-        assertTable();
-        return db.update(mTable, values, getSelection(), getSelectionArgs());
+        this.assertTable();
+        return db.update(this.mTable, values, this.getSelection(), this.getSelectionArgs());
     }
 
     /**
      * Execute delete using the current internal state as {@code WHERE} clause.
      */
     public int delete(SQLiteDatabase db) {
-        assertTable();
-        return db.delete(mTable, getSelection(), getSelectionArgs());
+        this.assertTable();
+        return db.delete(this.mTable, this.getSelection(), this.getSelectionArgs());
     }
 }

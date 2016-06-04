@@ -8,7 +8,7 @@
     <color name="primary_text_color_dark">#212121</color>
     <color name="secondary_text_color">#727272</color>
     <color name="divider_color">#B6B6B6</color>
-
+    <color name="statusBarColor">@android:color/transparent</color>
     <array name="swipe_to_refresh_progress_colors">
         <item>#FF9800</item>
         <item>#B3E5FC</item>

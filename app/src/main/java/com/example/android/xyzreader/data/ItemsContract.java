@@ -27,20 +27,20 @@ public class ItemsContract {
 		String PUBLISHED_DATE = "published_date";
 	}
 
-	public static class Items implements ItemsColumns {
+	public static class Items implements ItemsContract.ItemsColumns {
 		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.com.example.xyzreader.items";
 		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.com.example.xyzreader.items";
 
-        public static final String DEFAULT_SORT = PUBLISHED_DATE + " DESC";
+        public static final String DEFAULT_SORT = ItemsContract.ItemsColumns.PUBLISHED_DATE + " DESC";
 
 		/** Matches: /items/ */
 		public static Uri buildDirUri() {
-			return BASE_URI.buildUpon().appendPath("items").build();
+			return ItemsContract.BASE_URI.buildUpon().appendPath("items").build();
 		}
 
 		/** Matches: /items/[_id]/ */
 		public static Uri buildItemUri(long _id) {
-			return BASE_URI.buildUpon().appendPath("items").appendPath(Long.toString(_id)).build();
+			return ItemsContract.BASE_URI.buildUpon().appendPath("items").appendPath(Long.toString(_id)).build();
 		}
 
         /** Read item ID item detail URI. */

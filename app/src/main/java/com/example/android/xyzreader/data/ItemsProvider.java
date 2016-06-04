@@ -12,6 +12,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
+import com.example.android.xyzreader.data.ItemsContract.Items;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,30 +27,30 @@ public class ItemsProvider extends ContentProvider {
 	private static final int ITEMS = 0;
 	private static final int ITEMS__ID = 1;
 
-	private static final UriMatcher sUriMatcher = buildUriMatcher();
+	private static final UriMatcher sUriMatcher = ItemsProvider.buildUriMatcher();
 
 	private static UriMatcher buildUriMatcher() {
-		final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
-		final String authority = ItemsContract.CONTENT_AUTHORITY;
-		matcher.addURI(authority, "items", ITEMS);
-		matcher.addURI(authority, "items/#", ITEMS__ID);
+		UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
+		String authority = ItemsContract.CONTENT_AUTHORITY;
+		matcher.addURI(authority, "items", ItemsProvider.ITEMS);
+		matcher.addURI(authority, "items/#", ItemsProvider.ITEMS__ID);
 		return matcher;
 	}
 
 	@Override
 	public boolean onCreate() {
-        mOpenHelper = new ItemsDatabase(getContext());
+		this.mOpenHelper = new ItemsDatabase(this.getContext());
 		return true;
 	}
 
 	@Override
 	public String getType(Uri uri) {
-		final int match = sUriMatcher.match(uri);
+		int match = ItemsProvider.sUriMatcher.match(uri);
 		switch (match) {
-			case ITEMS:
-				return ItemsContract.Items.CONTENT_TYPE;
-			case ITEMS__ID:
-				return ItemsContract.Items.CONTENT_ITEM_TYPE;
+			case ItemsProvider.ITEMS:
+				return Items.CONTENT_TYPE;
+			case ItemsProvider.ITEMS__ID:
+				return Items.CONTENT_ITEM_TYPE;
 			default:
 				throw new UnsupportedOperationException("Unknown uri: " + uri);
 		}
@@ -56,66 +58,61 @@ public class ItemsProvider extends ContentProvider {
 
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-		final SQLiteDatabase db = mOpenHelper.getReadableDatabase();
-		final SelectionBuilder builder = buildSelection(uri);
+		SQLiteDatabase db = this.mOpenHelper.getReadableDatabase();
+		SelectionBuilder builder = this.buildSelection(uri);
 		Cursor cursor = builder.where(selection, selectionArgs).query(db, projection, sortOrder);
         if (cursor != null) {
-            cursor.setNotificationUri(getContext().getContentResolver(), uri);
+            cursor.setNotificationUri(this.getContext().getContentResolver(), uri);
         }
         return cursor;
 	}
 
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
-		final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-		final int match = sUriMatcher.match(uri);
+		SQLiteDatabase db = this.mOpenHelper.getWritableDatabase();
+		int match = ItemsProvider.sUriMatcher.match(uri);
 		switch (match) {
-			case ITEMS: {
+			case ItemsProvider.ITEMS:
 				final long _id = db.insertOrThrow(Tables.ITEMS, null, values);
-                getContext().getContentResolver().notifyChange(uri, null);
+				getContext().getContentResolver().notifyChange(uri, null);
 				return ItemsContract.Items.buildItemUri(_id);
-			}
-			default: {
+			default:
 				throw new UnsupportedOperationException("Unknown uri: " + uri);
-			}
 		}
 	}
 
 	@Override
 	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-		final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-		final SelectionBuilder builder = buildSelection(uri);
-        getContext().getContentResolver().notifyChange(uri, null);
+		SQLiteDatabase db = this.mOpenHelper.getWritableDatabase();
+		SelectionBuilder builder = this.buildSelection(uri);
+		this.getContext().getContentResolver().notifyChange(uri, null);
 		return builder.where(selection, selectionArgs).update(db, values);
 	}
 
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
-		final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-		final SelectionBuilder builder = buildSelection(uri);
-        getContext().getContentResolver().notifyChange(uri, null);
+		SQLiteDatabase db = this.mOpenHelper.getWritableDatabase();
+		SelectionBuilder builder = this.buildSelection(uri);
+		this.getContext().getContentResolver().notifyChange(uri, null);
 		return builder.where(selection, selectionArgs).delete(db);
 	}
 
 	private SelectionBuilder buildSelection(Uri uri) {
-		final SelectionBuilder builder = new SelectionBuilder();
-		final int match = sUriMatcher.match(uri);
-		return buildSelection(uri, match, builder);
+		SelectionBuilder builder = new SelectionBuilder();
+		int match = ItemsProvider.sUriMatcher.match(uri);
+		return this.buildSelection(uri, match, builder);
 	}
 
 	private SelectionBuilder buildSelection(Uri uri, int match, SelectionBuilder builder) {
-		final List<String> paths = uri.getPathSegments();
+		List<String> paths = uri.getPathSegments();
 		switch (match) {
-			case ITEMS: {
+			case ItemsProvider.ITEMS:
 				return builder.table(Tables.ITEMS);
-			}
-			case ITEMS__ID: {
+			case ItemsProvider.ITEMS__ID:
 				final String _id = paths.get(1);
 				return builder.table(Tables.ITEMS).where(ItemsContract.Items._ID + "=?", _id);
-			}
-			default: {
+			default:
 				throw new UnsupportedOperationException("Unknown uri: " + uri);
-			}
 		}
 	}
 
@@ -124,13 +121,14 @@ public class ItemsProvider extends ContentProvider {
      * a {@link SQLiteDatabase} transaction. All changes will be rolled back if
      * any single one fails.
      */
-    public ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations)
+    @Override
+	public ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations)
             throws OperationApplicationException {
-        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        SQLiteDatabase db = this.mOpenHelper.getWritableDatabase();
         db.beginTransaction();
         try {
-            final int numOperations = operations.size();
-            final ContentProviderResult[] results = new ContentProviderResult[numOperations];
+            int numOperations = operations.size();
+            ContentProviderResult[] results = new ContentProviderResult[numOperations];
             for (int i = 0; i < numOperations; i++) {
                 results[i] = operations.get(i).apply(this, results, i);
             }

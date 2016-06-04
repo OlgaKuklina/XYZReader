@@ -6,17 +6,25 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.Adapter;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.example.android.xyzreader.R;
+import com.example.android.xyzreader.R.color;
+import com.example.android.xyzreader.R.id;
+import com.example.android.xyzreader.R.layout;
+import com.example.android.xyzreader.adapter.ListItemsAdapter.ViewHolder;
 import com.example.android.xyzreader.data.ArticleLoader;
+import com.example.android.xyzreader.data.ArticleLoader.Query;
 import com.example.android.xyzreader.data.ItemsContract;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
@@ -26,40 +34,40 @@ import static android.support.v4.app.ActivityCompat.startActivity;
 /**
  * Created by olgakuklina on 2016-05-04.
  */
-public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.ViewHolder> {
+public class ListItemsAdapter extends Adapter<ViewHolder> {
 
     public static final String TAG = ListItemsAdapter.class.getSimpleName();
     private final int screenWidth;
 
     public ListItemsAdapter(Activity activity, Cursor cursor) {
 
-        mActivity = activity;
-        mCursor = cursor;
-        screenWidth = mActivity.getBaseContext().getResources().getDisplayMetrics().widthPixels;
-        Log.v(TAG, "screenWidth = " + screenWidth);
+        this.mActivity = activity;
+        this.mCursor = cursor;
+        this.screenWidth = this.mActivity.getBaseContext().getResources().getDisplayMetrics().widthPixels;
+        Log.v(ListItemsAdapter.TAG, "screenWidth = " + this.screenWidth);
     }
 
     public interface OnListItemClickListener {
         void onListItemSelected(long articleId);
 
-        OnListItemClickListener listner = new OnListItemClickListener() {
+        ListItemsAdapter.OnListItemClickListener listner = new ListItemsAdapter.OnListItemClickListener() {
             @Override public void onListItemSelected(long itemId) {
             }
         };
     }
-    private OnListItemClickListener mListener = OnListItemClickListener.listner;
+    private ListItemsAdapter.OnListItemClickListener mListener = ListItemsAdapter.OnListItemClickListener.listner;
     private final Activity mActivity;
     private final Cursor mCursor;
 
-    public ListItemsAdapter setListener(@NonNull OnListItemClickListener listener) {
-        mListener = listener;
+    public ListItemsAdapter setListener(@NonNull ListItemsAdapter.OnListItemClickListener listener) {
+        this.mListener = listener;
         return this;
     }
     @Override
     public long getItemId(int position) {
-        Log.v(TAG, "getItemId = " + position );
-        mCursor.moveToPosition(position);
-        return mCursor.getLong(ArticleLoader.Query._ID);
+        Log.v(ListItemsAdapter.TAG, "getItemId = " + position );
+        this.mCursor.moveToPosition(position);
+        return this.mCursor.getLong(Query._ID);
     }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -71,26 +79,26 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.View
 
             public ViewHolder(View v) {
                 super(v);
-                thumbnailView = (ImageView) v.findViewById(R.id.thumbnail);
-                titleView = (TextView) v.findViewById(R.id.article_title);
-                subtitleView = (TextView) v.findViewById(R.id.article_subtitle);
-                v.setOnClickListener(new View.OnClickListener() {
+                this.thumbnailView = (ImageView) v.findViewById(id.thumbnail);
+                this.titleView = (TextView) v.findViewById(id.article_title);
+                this.subtitleView = (TextView) v.findViewById(id.article_subtitle);
+                v.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mListener.onListItemSelected(getItemId());
+                        ListItemsAdapter.this.mListener.onListItemSelected(ViewHolder.this.getItemId());
                     }
                 });
             }
         }
 
     @Override
-    public ListItemsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        Log.v(TAG, "ListItemsAdapter::onCreateViewHolder");
+        Log.v(ListItemsAdapter.TAG, "ListItemsAdapter::onCreateViewHolder");
 
-        View view =  LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+        View view =  LayoutInflater.from(parent.getContext()).inflate(layout.list_item, parent, false);
 
-        final ViewHolder vh = new ViewHolder(view);
+        ListItemsAdapter.ViewHolder vh = new ListItemsAdapter.ViewHolder(view);
 
         return vh;
     }
@@ -98,29 +106,29 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.View
     @Override
     public void onBindViewHolder(ListItemsAdapter.ViewHolder holder, int position) {
 
-        mCursor.moveToPosition(position);
-        holder.titleView.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.colorPrimary));
-        holder.titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
-        holder.subtitleView.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.colorPrimary));
+        this.mCursor.moveToPosition(position);
+        holder.titleView.setBackgroundColor(ContextCompat.getColor(this.mActivity, color.colorPrimary));
+        holder.titleView.setText(this.mCursor.getString(Query.TITLE));
+        holder.subtitleView.setBackgroundColor(ContextCompat.getColor(this.mActivity, color.colorPrimary));
         holder.subtitleView.setText(
                 DateUtils.getRelativeTimeSpanString(
-                        mCursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
+                        this.mCursor.getLong(Query.PUBLISHED_DATE),
                         System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
-                        DateUtils.FORMAT_ABBREV_ALL).toString()
+                        DateUtils.FORMAT_ABBREV_ALL)
                         + " by "
-                        + mCursor.getString(ArticleLoader.Query.AUTHOR));
-        float aspectRatio = mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO);
-        Log.v(TAG, "aspectRatio = " + aspectRatio);
-        holder.thumbnailView.setLayoutParams(new LinearLayout.LayoutParams((int) (screenWidth), (int) (screenWidth/aspectRatio)));
-        Picasso pic = Picasso.with(mActivity);
-        pic.load(mCursor.getString(ArticleLoader.Query.THUMB_URL))
+                        + this.mCursor.getString(Query.AUTHOR));
+        float aspectRatio = this.mCursor.getFloat(Query.ASPECT_RATIO);
+        Log.v(ListItemsAdapter.TAG, "aspectRatio = " + aspectRatio);
+        holder.thumbnailView.setLayoutParams(new LayoutParams(this.screenWidth, (int) (this.screenWidth /aspectRatio)));
+        Picasso pic = Picasso.with(this.mActivity);
+        pic.load(this.mCursor.getString(Query.THUMB_URL))
                 .memoryPolicy(MemoryPolicy.NO_CACHE)
-                .placeholder(R.color.colorPrimary)
+                .placeholder(color.colorPrimary)
                 .into(holder.thumbnailView);
     }
 
     @Override
     public int getItemCount() {
-        return mCursor.getCount();
+        return this.mCursor.getCount();
     }
 }
