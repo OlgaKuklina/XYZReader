@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#FF9800</color>
-    <color name="colorPrimarylight">#FFE0B2</color>
-    <color name="colorPrimaryDark">#F57C00</color>
+    <color name="colorPrimaryDark">#f76904</color>
     <color name="colorAccent">#607D8B</color>
 
     <color name="primary_text_color_dark">#212121</color>
@@ -14,7 +13,7 @@
     <color name="statusBarColor">@android:color/transparent</color>
 
     <array name="swipe_to_refresh_progress_colors">
-        <item>#FF9800</item>
+        <item>#f76904</item>
         <item>#09A3EA</item>
     </array>
 </resources>

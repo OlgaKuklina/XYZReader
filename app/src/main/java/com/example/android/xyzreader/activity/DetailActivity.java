@@ -12,6 +12,7 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.SimpleOnPageChangeListener;
+import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnApplyWindowInsetsListener;
@@ -30,7 +31,7 @@ import com.example.android.xyzreader.fragments.DetailActivityFragment;
 /**
  * An activity representing a single Article detail screen, letting you swipe between articles.
  */
-public class DetailActivity extends MainActivity
+public class DetailActivity extends AppCompatActivity
         implements LoaderCallbacks<Cursor> {
 
     private Cursor mCursor;

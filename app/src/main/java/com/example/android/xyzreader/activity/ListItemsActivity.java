@@ -12,6 +12,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
@@ -35,7 +36,7 @@ import com.example.android.xyzreader.data.UpdaterService;
 /**
  * Created by olgakuklina on 2016-05-04.
  */
-public class ListItemsActivity extends MainActivity implements LoaderCallbacks<Cursor>, OnRefreshListener, OnListItemClickListener {
+public class ListItemsActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>, OnRefreshListener, OnListItemClickListener {
     private static final String TAG = ListItemsActivity.class.getSimpleName();
     private LayoutManager mLayoutManager;
     private Adapter mAdapter;
